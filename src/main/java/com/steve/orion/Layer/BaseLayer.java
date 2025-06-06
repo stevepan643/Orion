@@ -7,9 +7,7 @@ public abstract class BaseLayer implements Layer {
 
     public BaseLayer(String name) {
         super();
-        if (name == null)
-            name = "Layer";
-        this.name = name;
+        this.name = (name == null) ? "Layer" : name;
     }
 
     @Override

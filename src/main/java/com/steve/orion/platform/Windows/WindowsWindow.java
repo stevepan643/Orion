@@ -15,15 +15,18 @@ import com.steve.orion.Events.WindowEvents.WindowMovedEvent;
 import com.steve.orion.Events.WindowEvents.WindowResizeEvent;
 import com.steve.orion.Log.Log;
 import com.steve.orion.Window;
-import org.lwjgl.opengl.GL;
+import com.steve.orion.platform.opengl.OpenGLContext;
+import com.steve.orion.renderer.GraphicsContext;
 import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class WindowsWindow extends Window {
-    private WindowData data = new WindowData();
+    private final WindowData data = new WindowData();
     private static boolean GLFWInitialized = false;
+
+    private GraphicsContext context;
 
     public long getWindow() { return window; }
 
@@ -46,8 +49,10 @@ public class WindowsWindow extends Window {
         }
 
         window = glfwCreateWindow(pros.width(), pros.height(), data.title, NULL, NULL);
-        glfwMakeContextCurrent(window);
-        GL.createCapabilities();
+
+        context = new OpenGLContext(this);
+        context.init();
+
         setVSync(true);
 
         glfwSetWindowSizeCallback(window, (window, width, height) -> {
@@ -134,7 +139,7 @@ public class WindowsWindow extends Window {
     @Override
     public void onUpdate() {
         glfwPollEvents();
-        glfwSwapBuffers(window);
+        context.swapBuffers();
     }
 
     @Override
