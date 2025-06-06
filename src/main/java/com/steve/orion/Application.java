@@ -4,7 +4,7 @@ import com.steve.orion.Events.BaseEvent;
 import com.steve.orion.Events.EventDispatcher;
 import com.steve.orion.Events.EventType;
 import com.steve.orion.Events.WindowEvents.WindowCloseEvent;
-import com.steve.orion.Inputs.Input;
+import com.steve.orion.ImGui.ImGuiLayer;
 import com.steve.orion.Layer.Layer;
 import com.steve.orion.Layer.LayerStack;
 import com.steve.orion.Log.Log;
@@ -14,19 +14,19 @@ import org.lwjgl.opengl.GL11;
 import java.io.Closeable;
 import java.util.ListIterator;
 
-import static com.steve.orion.Inputs.KeyCodes.ORION_KEY_TAB;
-
 public abstract class Application implements Closeable {
     protected Window window;
-    private Window.WindowPros pros;
     private boolean running = true;
-    private LayerStack layerStack;
+    private final LayerStack layerStack;
+    private final ImGuiLayer imGuiLayer;
 
     public Application() {
-        pros = new Window.WindowPros("Orion", 1280, 720);
+        Window.WindowPros pros = new Window.WindowPros("Orion", 1280, 720);
         window = WindowsWindow.createWindow(pros);
         window.setCallback(this::onEvent);
         layerStack = new LayerStack();
+        imGuiLayer = new ImGuiLayer(window);
+        pushOverlay(imGuiLayer);
     }
 
     public void pushLayer(Layer layer) {
@@ -72,6 +72,12 @@ public abstract class Application implements Closeable {
 
 //            Input.CurPos pos = Input.getCurPos();
 //            Log.CoreLog.debug("{}, {}", pos.x(), pos.y());
+            imGuiLayer.begin();
+            for (ListIterator<Layer> it = layerStack.begin(); it.hasNext(); ) {
+                Layer layer = it.next();
+                layer.onImGuiRender();
+            }
+            imGuiLayer.end();
 
             window.onUpdate();
         }

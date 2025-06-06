@@ -1,10 +1,9 @@
 import com.steve.orion.Application;
 import com.steve.orion.EntryPoint;
-import com.steve.orion.Events.Event;
-import com.steve.orion.ImGui.ImGuiLayer;
 import com.steve.orion.Inputs.Input;
 import com.steve.orion.Layer.BaseLayer;
 import com.steve.orion.Log.Log;
+import imgui.ImGui;
 
 import static com.steve.orion.Inputs.KeyCodes.ORION_KEY_TAB;
 
@@ -12,7 +11,7 @@ class Sandbox extends Application {
     public Sandbox() {
         super();
         pushLayer(new ExampleLayer());
-        pushLayer(new ImGuiLayer(window));
+//        pushLayer(new ImGuiLayer(window));
     }
 }
 
@@ -30,8 +29,10 @@ class ExampleLayer extends BaseLayer {
     }
 
     @Override
-    public void onEvent(Event event) {
-//        Log.AppLog.info("{}", event);
+    public void onImGuiRender() {
+        ImGui.begin("Test");
+        ImGui.text("Hello World");
+        ImGui.end();
     }
 }
 

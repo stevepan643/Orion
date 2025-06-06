@@ -7,6 +7,7 @@ public interface Layer {
     void onDetach();
     void onUpdate();
     void onEvent(Event event);
+    void onImGuiRender();
 
     String getName();
 }
