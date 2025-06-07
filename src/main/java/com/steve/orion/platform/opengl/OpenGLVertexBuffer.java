@@ -32,8 +32,9 @@ public class OpenGLVertexBuffer extends VertexBuffer {
     }
 
     @Override
-    public void setLayout(BufferLayout layout) {
+    public VertexBuffer setLayout(BufferLayout layout) {
         this.bufferLayout = layout;
+        return this;
     }
 
     @Override

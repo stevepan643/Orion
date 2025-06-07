@@ -1,6 +1,6 @@
 package com.steve.orion.platform.Windows;
 
-import com.steve.orion.Inputs.Input;
+import com.steve.orion.input.Input;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 

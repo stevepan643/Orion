@@ -1,6 +1,6 @@
 package com.steve.orion;
 
-import com.steve.orion.Events.Callback;
+import com.steve.orion.event.Callback;
 
 public abstract class Window {
     public record WindowPros(String Title, int width, int height) {}

@@ -1,6 +1,6 @@
 package com.steve.orion.ImGui;
 
-import com.steve.orion.Layer.BaseLayer;
+import com.steve.orion.layer.BaseLayer;
 import com.steve.orion.Window;
 import imgui.ImGui;
 import imgui.ImGuiIO;

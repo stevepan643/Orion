@@ -1,5 +1,7 @@
 package com.steve.orion;
 
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+
 public class Core {
     private Core() {}
 
@@ -7,4 +9,9 @@ public class Core {
         if (!b)
             throw new AssertionError(s);
     }
+
+    public static double getRuntime() {
+        return glfwGetTime(); // TODO: Need encapsulation
+    }
+
 }

@@ -6,6 +6,6 @@ public interface Buffer {
     void bind();
     void unbind();
     void cleanup();
-    void setLayout(BufferLayout layout);
+    Buffer setLayout(BufferLayout layout);
     BufferLayout getLayout();
 }

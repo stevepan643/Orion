@@ -12,6 +12,7 @@ public class OpenGLIndexBuffer extends IndexBuffer {
 
     public OpenGLIndexBuffer(int[] indices) {
         renderID = glCreateBuffers();
+        count = indices.length;
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
     }
@@ -32,8 +33,9 @@ public class OpenGLIndexBuffer extends IndexBuffer {
     }
 
     @Override
-    public void setLayout(BufferLayout layout) {
+    public IndexBuffer setLayout(BufferLayout layout) {
         this.bufferLayout = layout;
+        return this;
     }
 
     @Override

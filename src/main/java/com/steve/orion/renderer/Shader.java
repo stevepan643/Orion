@@ -1,6 +1,10 @@
 package com.steve.orion.renderer;
 
 import com.steve.orion.Log.Loggable;
+import com.steve.orion.util.MemManager;
+import org.joml.Matrix4f;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -77,5 +81,12 @@ public class Shader implements Loggable {
 
     public void unbind() {
         glUseProgram(0);
+    }
+
+    public void uploadUniformMat4(final String name, final Matrix4f matrix4f) {
+        int location = glGetUniformLocation(rendererID, name);
+        FloatBuffer buffer = MemManager.getMat4Buffer();
+        matrix4f.get(buffer);
+        glUniformMatrix4fv(location, false, buffer);
     }
 }
