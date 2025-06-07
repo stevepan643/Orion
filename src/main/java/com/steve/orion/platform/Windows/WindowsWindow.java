@@ -13,7 +13,7 @@ import com.steve.orion.Events.MouseEvents.MouseScrolledEvent;
 import com.steve.orion.Events.WindowEvents.WindowCloseEvent;
 import com.steve.orion.Events.WindowEvents.WindowMovedEvent;
 import com.steve.orion.Events.WindowEvents.WindowResizeEvent;
-import com.steve.orion.Log.Log;
+import com.steve.orion.Log.Loggable;
 import com.steve.orion.Window;
 import com.steve.orion.platform.opengl.OpenGLContext;
 import com.steve.orion.renderer.GraphicsContext;
@@ -22,7 +22,7 @@ import org.lwjgl.system.MemoryUtil;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class WindowsWindow extends Window {
+public class WindowsWindow extends Window implements Loggable {
     private final WindowData data = new WindowData();
     private static boolean GLFWInitialized = false;
 
@@ -39,7 +39,7 @@ public class WindowsWindow extends Window {
         data.width = pros.width();
         data.height = pros.height();
 
-        Log.CoreLog.info("Creating Window {} ({}x{})", data.title, data.width, data.height);
+        CoreLog.info("Creating Window {} ({}x{})", data.title, data.width, data.height);
 
         if (!GLFWInitialized) {
             boolean success = glfwInit();

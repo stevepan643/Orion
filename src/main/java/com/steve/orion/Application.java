@@ -7,18 +7,26 @@ import com.steve.orion.Events.WindowEvents.WindowCloseEvent;
 import com.steve.orion.ImGui.ImGuiLayer;
 import com.steve.orion.Layer.Layer;
 import com.steve.orion.Layer.LayerStack;
-import com.steve.orion.Log.Log;
+import com.steve.orion.Log.Loggable;
+import com.steve.orion.io.Files;
 import com.steve.orion.platform.Windows.WindowsWindow;
+import com.steve.orion.renderer.Shader;
 import org.lwjgl.opengl.GL11;
 
 import java.io.Closeable;
 import java.util.ListIterator;
 
-public abstract class Application implements Closeable {
+import static org.lwjgl.opengl.GL30.*;
+
+public abstract class Application implements Closeable, Loggable {
     protected Window window;
     private boolean running = true;
     private final LayerStack layerStack;
     private final ImGuiLayer imGuiLayer;
+    private Shader shader;
+
+
+    int vertexArray;
 
     public Application() {
         Window.WindowPros pros = new Window.WindowPros("Orion", 1280, 720);
@@ -27,6 +35,31 @@ public abstract class Application implements Closeable {
         layerStack = new LayerStack();
         imGuiLayer = new ImGuiLayer(window);
         pushOverlay(imGuiLayer);
+
+        vertexArray = glGenVertexArrays();
+        glBindVertexArray(vertexArray);
+
+        int vertexBuffer = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+        float[] vertices = {
+                -0.5f, -0.5f, 0.0f,
+                 0.5f, -0.5f, 0.0f,
+                 0.0f,  0.5f, 0.0f,
+        };
+
+        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * Float.BYTES, 0);
+
+        int indexBuffer = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+        int[] indices = { 0, 1, 2 };
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+
+        shader = new Shader("src/main/resources/v.vert", "src/main/resources/f.frag");
     }
 
     public void pushLayer(Layer layer) {
@@ -56,14 +89,19 @@ public abstract class Application implements Closeable {
     }
 
     public void close() {
+        shader.cleanup();
         window.close();
         layerStack.close();
     }
 
     public void run() {
         while (running) {
-            GL11.glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
+            GL11.glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+            shader.bind();
+            glBindVertexArray(vertexArray);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
             for (ListIterator<Layer> it = layerStack.begin(); it.hasNext(); ) {
                 Layer layer = it.next();
@@ -81,6 +119,6 @@ public abstract class Application implements Closeable {
 
             window.onUpdate();
         }
-        Log.CoreLog.info("Application stopped");
+        CoreLog.info("Application stopped");
     }
 }

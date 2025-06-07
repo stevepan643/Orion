@@ -2,7 +2,8 @@ import com.steve.orion.Application;
 import com.steve.orion.EntryPoint;
 import com.steve.orion.Inputs.Input;
 import com.steve.orion.Layer.BaseLayer;
-import com.steve.orion.Log.Log;
+import com.steve.orion.Log.Loggable;
+import com.steve.orion.renderer.Shader;
 import imgui.ImGui;
 
 import static com.steve.orion.Inputs.KeyCodes.ORION_KEY_TAB;
@@ -15,7 +16,7 @@ class Sandbox extends Application {
     }
 }
 
-class ExampleLayer extends BaseLayer {
+class ExampleLayer extends BaseLayer implements Loggable {
     public ExampleLayer() {
         super("Example");
     }
@@ -25,7 +26,7 @@ class ExampleLayer extends BaseLayer {
         super.onUpdate();
 
         if (Input.isKeyPressed(ORION_KEY_TAB))
-            Log.AppLog.debug("Tab is pressed");
+            AppLog.debug("Tab is pressed");
     }
 
     @Override
