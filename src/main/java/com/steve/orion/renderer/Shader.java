@@ -1,7 +1,6 @@
 package com.steve.orion.renderer;
 
 import com.steve.orion.Log.Loggable;
-import com.steve.orion.io.Files;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -9,20 +8,19 @@ public class Shader implements Loggable {
 
     private int rendererID;
 
-    public Shader(String vertexPath, String fragmentPath) {
-        String source;
+    public Shader(String vertexSrc, String fragmentSrc) {
         int isCompiled;
 
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        source = Files.read(vertexPath);
-        glShaderSource(vertexShader, source);
+
+        glShaderSource(vertexShader, vertexSrc);
         glCompileShader(vertexShader);
 
         isCompiled = glGetShaderi(vertexShader, GL_COMPILE_STATUS);
         if (isCompiled == GL_FALSE) {
             String infoLog = glGetShaderInfoLog(vertexShader);
-            CoreLog.error("Compile error in {} shader (file: {}):",
-                    "Vertex", vertexPath);
+            CoreLog.error("Compile error in {} shader:",
+                    "Vertex");
             for (String line : infoLog.split("\n")) {
                 CoreLog.error("  {}", line.trim());
             }
@@ -31,15 +29,14 @@ public class Shader implements Loggable {
         }
 
         int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        source = Files.read(fragmentPath);
-        glShaderSource(fragmentShader, source);
+        glShaderSource(fragmentShader, fragmentSrc);
         glCompileShader(fragmentShader);
 
         isCompiled = glGetShaderi(fragmentShader, GL_COMPILE_STATUS);
         if (isCompiled == GL_FALSE) {
             String infoLog = glGetShaderInfoLog(fragmentShader);
-            CoreLog.error("Compile error in {} shader (file: {}):",
-                    "Fragment", fragmentPath);
+            CoreLog.error("Compile error in {} shader:",
+                    "Fragment");
             for (String line : infoLog.split("\n")) {
                 CoreLog.error("  {}", line.trim());
             }

@@ -11,6 +11,11 @@ import com.steve.orion.Log.Loggable;
 import com.steve.orion.io.Files;
 import com.steve.orion.platform.Windows.WindowsWindow;
 import com.steve.orion.renderer.Shader;
+import com.steve.orion.renderer.buffer.IndexBuffer;
+import com.steve.orion.renderer.buffer.VertexBuffer;
+import com.steve.orion.renderer.buffer.layout.BufferElement;
+import com.steve.orion.renderer.buffer.layout.BufferLayout;
+import com.steve.orion.renderer.buffer.layout.ShaderDataType;
 import org.lwjgl.opengl.GL11;
 
 import java.io.Closeable;
@@ -26,7 +31,30 @@ public abstract class Application implements Closeable, Loggable {
     private Shader shader;
 
 
+    private VertexBuffer vertexBuffer;
+    private IndexBuffer indexBuffer;
+
     int vertexArray;
+
+    private int shaderTypeToOpenGLBaseType(ShaderDataType type) {
+        return switch (type) {
+            case Float,
+                 Float2,
+                 Float3,
+                 Float4-> GL_FLOAT;
+            case Mat3,
+                 Mat4-> GL_FLOAT;
+            case Int,
+                 Int2,
+                 Int3,
+                 Int4-> GL_INT;
+            case Bool -> GL_BOOL;
+            default -> {
+                CoreLog.error("Unknown type");
+                yield 0;
+            }
+        };
+    }
 
     public Application() {
         Window.WindowPros pros = new Window.WindowPros("Orion", 1280, 720);
@@ -39,27 +67,42 @@ public abstract class Application implements Closeable, Loggable {
         vertexArray = glGenVertexArrays();
         glBindVertexArray(vertexArray);
 
-        int vertexBuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-
         float[] vertices = {
-                -0.5f, -0.5f, 0.0f,
-                 0.5f, -0.5f, 0.0f,
-                 0.0f,  0.5f, 0.0f,
+                -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+                 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+                 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f,
         };
 
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+        vertexBuffer = VertexBuffer.create(vertices);
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * Float.BYTES, 0);
+        {
+            BufferLayout layout = new BufferLayout(
+                    new BufferElement(ShaderDataType.Float3, "a_Position"),
+                    new BufferElement(ShaderDataType.Float4, "a_Color")
+            );
 
-        int indexBuffer = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+            vertexBuffer.setLayout(layout);
+        }
+
+        int index = 0;
+        for (BufferElement element:vertexBuffer.getLayout().getElements()) {
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(
+                    index,
+                    element.getComponentCount(),
+                    shaderTypeToOpenGLBaseType(element.getType()),
+                    element.isNormalized(),
+                    vertexBuffer.getLayout().getStride(),
+                    element.getOffset());
+            index ++;
+        }
 
         int[] indices = { 0, 1, 2 };
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+        indexBuffer = IndexBuffer.create(indices);
 
-        shader = new Shader("src/main/resources/v.vert", "src/main/resources/f.frag");
+        shader = new Shader(
+                Files.read("src/main/resources/v.vert"),
+                Files.read("src/main/resources/f.frag"));
     }
 
     public void pushLayer(Layer layer) {

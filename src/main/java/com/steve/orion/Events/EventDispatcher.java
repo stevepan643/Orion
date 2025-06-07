@@ -18,5 +18,4 @@ public class EventDispatcher {
         }
         return false;
     }
-
 }

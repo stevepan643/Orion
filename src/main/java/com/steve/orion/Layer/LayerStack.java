@@ -1,10 +1,10 @@
 package com.steve.orion.Layer;
 
+import java.util.ArrayList;
 import java.util.ListIterator;
-import java.util.Vector;
 
 public class LayerStack {
-    private final Vector<Layer> layers = new Vector<>();
+    private final ArrayList<Layer> layers = new ArrayList<>();
     private int layerInsertIndex = 0;
 
     public void pushLayer(Layer layer) {

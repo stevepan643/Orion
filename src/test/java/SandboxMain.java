@@ -3,7 +3,7 @@ import com.steve.orion.EntryPoint;
 import com.steve.orion.Inputs.Input;
 import com.steve.orion.Layer.BaseLayer;
 import com.steve.orion.Log.Loggable;
-import com.steve.orion.renderer.Shader;
+import com.steve.orion.renderer.RenderAPI;
 import imgui.ImGui;
 
 import static com.steve.orion.Inputs.KeyCodes.ORION_KEY_TAB;
@@ -44,6 +44,7 @@ public class SandboxMain extends EntryPoint {
 
     @Override
     protected Application createApplication() {
+        RenderAPI.setApi(RenderAPI.OpenGL);
         return new Sandbox();
     }
 }
