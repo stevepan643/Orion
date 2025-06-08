@@ -1,92 +1,28 @@
 package com.steve.orion.renderer;
 
 import com.steve.orion.Log.Loggable;
-import com.steve.orion.util.MemManager;
-import org.joml.Matrix4f;
+import com.steve.orion.platform.opengl.OpenGLShader;
 
-import java.nio.FloatBuffer;
+public abstract class Shader implements Loggable {
+    int renderID = 0;
 
-import static org.lwjgl.opengl.GL20.*;
+    abstract public void cleanup();
+    abstract public void bind();
+    abstract public void unbind();
 
-public class Shader implements Loggable {
+//    abstract public void uploadUniformFloat4(final String name, Vector4f vector4f);
+//    abstract public void uploadUniformFloat4(final String name, final float x, float y, float z, float w);
+//
+//    abstract public void uploadUniform(final String name, final Matrix4f matrix4f);
 
-    private int rendererID;
-
-    public Shader(String vertexSrc, String fragmentSrc) {
-        int isCompiled;
-
-        int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
-        glShaderSource(vertexShader, vertexSrc);
-        glCompileShader(vertexShader);
-
-        isCompiled = glGetShaderi(vertexShader, GL_COMPILE_STATUS);
-        if (isCompiled == GL_FALSE) {
-            String infoLog = glGetShaderInfoLog(vertexShader);
-            CoreLog.error("Compile error in {} shader:",
-                    "Vertex");
-            for (String line : infoLog.split("\n")) {
-                CoreLog.error("  {}", line.trim());
+    public static Shader create(String vertexSrc, String fragmentSrc) {
+        switch (RendererAPI.getApi()) {
+            case None -> CoreLog.error("Need set RenderAPI");
+            case OpenGL -> {
+                return new OpenGLShader(vertexSrc, fragmentSrc);
             }
-            glDeleteShader(vertexShader);
-            return;
         }
-
-        int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragmentShader, fragmentSrc);
-        glCompileShader(fragmentShader);
-
-        isCompiled = glGetShaderi(fragmentShader, GL_COMPILE_STATUS);
-        if (isCompiled == GL_FALSE) {
-            String infoLog = glGetShaderInfoLog(fragmentShader);
-            CoreLog.error("Compile error in {} shader:",
-                    "Fragment");
-            for (String line : infoLog.split("\n")) {
-                CoreLog.error("  {}", line.trim());
-            }
-            glDeleteShader(vertexShader);
-            glDeleteShader(fragmentShader);
-            return;
-        }
-
-        rendererID = glCreateProgram();
-
-        glAttachShader(rendererID, vertexShader);
-        glAttachShader(rendererID, fragmentShader);
-
-        glLinkProgram(rendererID);
-
-        int isLinked = glGetProgrami(rendererID, GL_LINK_STATUS);
-        if (isLinked == GL_FALSE) {
-            String infoLog = glGetProgramInfoLog(rendererID);
-            CoreLog.error("Shader program link error:");
-            for (String line : infoLog.split("\n")) {
-                CoreLog.error("  {}", line.trim());
-            }
-            glDeleteProgram(rendererID);
-            return;
-        }
-
-        glDetachShader(rendererID, vertexShader);
-        glDetachShader(rendererID, fragmentShader);
-    }
-
-    public void cleanup() {
-        glDeleteProgram(rendererID);
-    }
-
-    public void bind() {
-        glUseProgram(rendererID);
-    }
-
-    public void unbind() {
-        glUseProgram(0);
-    }
-
-    public void uploadUniformMat4(final String name, final Matrix4f matrix4f) {
-        int location = glGetUniformLocation(rendererID, name);
-        FloatBuffer buffer = MemManager.getMat4Buffer();
-        matrix4f.get(buffer);
-        glUniformMatrix4fv(location, false, buffer);
+        CoreLog.error("Unknown API: {}", RendererAPI.getApi());
+        return null;
     }
 }

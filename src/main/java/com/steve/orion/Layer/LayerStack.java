@@ -1,7 +1,6 @@
 package com.steve.orion.layer;
 
-import com.steve.orion.core.Timestep;
-import com.steve.orion.layer.Layer;
+import com.steve.orion.core.Timer;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -49,7 +48,7 @@ public class LayerStack {
     }
 
     public interface ConsumerWithTimestep {
-        void accept(Layer layer, Timestep ts);
+        void accept(Layer layer, Timer ts);
     }
 
     public void forEachLayer(Consumer<Layer> action) {
@@ -81,7 +80,7 @@ public class LayerStack {
         }
     }
 
-    public void forEachLayerReverse (ConsumerWithTimestep action, Timestep ts) {
+    public void forEachLayerReverse (ConsumerWithTimestep action, Timer ts) {
         ListIterator<Layer> it = layers.listIterator(layers.size());
         while (it.hasPrevious()) {
             Layer layer = it.previous();

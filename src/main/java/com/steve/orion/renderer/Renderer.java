@@ -1,5 +1,7 @@
 package com.steve.orion.renderer;
 
+import com.steve.orion.math.Matrices;
+import com.steve.orion.platform.opengl.OpenGLShader;
 import com.steve.orion.renderer.array.VertexArray;
 import com.steve.orion.renderer.camera.OrthographicCamera;
 import org.joml.Matrix4f;
@@ -10,14 +12,22 @@ public class Renderer {
 
     static SceneData sceneData;
 
+    public static void init() {
+        RenderCommand.init();
+    }
+
     public static void beginScene(OrthographicCamera camera) {
         sceneData = new SceneData(camera.getViewProjectionMatrix());
     }
     public static void endScene() {}
 
-    public static void submit(final Shader shader, final VertexArray array) {
+    public static void submit(final Shader shader, final VertexArray vertexArray) {
+        submit(shader, vertexArray, Matrices.MATRIX4F_ID);
+    }
+    public static void submit(final Shader shader, final VertexArray array, final Matrix4f transform) {
         shader.bind();
-        shader.uploadUniformMat4("u_ViewProjection", sceneData.viewProjectionMatrix);
+        ((OpenGLShader) shader).uploadUniform("u_ViewProjection", sceneData.viewProjectionMatrix);
+        ((OpenGLShader) shader).uploadUniform("u_Transform", transform);
         array.bind();
         RenderCommand.drawIndexed(array);
     }

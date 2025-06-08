@@ -1,8 +1,7 @@
 package com.steve.orion.layer;
 
-import com.steve.orion.core.Timestep;
+import com.steve.orion.core.Timer;
 import com.steve.orion.event.Event;
-import com.steve.orion.layer.Layer;
 
 public abstract class BaseLayer implements Layer {
     protected String name;
@@ -22,7 +21,7 @@ public abstract class BaseLayer implements Layer {
     @Override
     public void onDetach() {}
     @Override
-    public void onUpdate(Timestep timestep) {}
+    public void onUpdate(Timer timestep) {}
     @Override
     public void onEvent(Event event) {}
     public void onImGuiRender() {}

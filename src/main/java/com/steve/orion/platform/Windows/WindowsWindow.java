@@ -1,6 +1,8 @@
 package com.steve.orion.platform.Windows;
 
-import com.steve.orion.Core;
+import com.steve.orion.core.Core;
+import com.steve.orion.Log.Loggable;
+import com.steve.orion.Window;
 import com.steve.orion.event.BaseEvent;
 import com.steve.orion.event.Callback;
 import com.steve.orion.event.KeyEvents.KeyPressedEvent;
@@ -13,8 +15,6 @@ import com.steve.orion.event.MouseEvents.MouseScrolledEvent;
 import com.steve.orion.event.WindowEvents.WindowCloseEvent;
 import com.steve.orion.event.WindowEvents.WindowMovedEvent;
 import com.steve.orion.event.WindowEvents.WindowResizeEvent;
-import com.steve.orion.Log.Loggable;
-import com.steve.orion.Window;
 import com.steve.orion.platform.opengl.OpenGLContext;
 import com.steve.orion.renderer.GraphicsContext;
 import org.lwjgl.system.MemoryUtil;

@@ -19,6 +19,8 @@ public abstract class RendererAPI {
         return api;
     }
 
+    abstract public void init();
+
     abstract public void setClearColor(final Vector4f color);
     abstract public void clear();
 

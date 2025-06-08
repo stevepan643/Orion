@@ -11,6 +11,10 @@ public class RenderCommand {
         return new OpenGLRendererAPI(); // TODO: another API, need switch
     }
 
+    public static void init() {
+        rendererAPI.init();
+    }
+
     public static void setClearColor(float r, float g, float b, float a) {
         rendererAPI.setClearColor(new Vector4f(r, g, b, a));
     }

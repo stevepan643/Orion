@@ -6,8 +6,6 @@ import com.steve.orion.annotations.UseRendererAPI;
 import com.steve.orion.renderer.RendererAPI;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
@@ -33,6 +31,7 @@ public abstract class EntryPoint {
     }
 
     public void run() {
+        System.gc();
         try (Application app = createApplication()) {
             app.run();
         }
