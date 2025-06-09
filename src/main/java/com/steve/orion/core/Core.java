@@ -2,6 +2,8 @@ package com.steve.orion.core;
 
 import com.steve.orion.Log.Loggable;
 
+import java.net.URL;
+
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Core implements Loggable {
@@ -29,5 +31,15 @@ public class Core implements Loggable {
             throw new NullPointerException(msg);
         }
         return o;
+    }
+
+    // FIXME:
+    public static String getResourcePath(String relativePath) {
+        URL url = Core.class.getClassLoader().getResource(relativePath);
+        if (url == null) {
+            CoreLog.error("Resource not found: {}", relativePath);
+            return null;
+        }
+        return url.getPath();
     }
 }

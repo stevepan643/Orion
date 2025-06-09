@@ -4,6 +4,7 @@ import com.steve.orion.math.Matrices;
 import com.steve.orion.platform.opengl.OpenGLShader;
 import com.steve.orion.renderer.array.VertexArray;
 import com.steve.orion.renderer.camera.OrthographicCamera;
+import com.steve.orion.renderer.shader.Shader;
 import org.joml.Matrix4f;
 
 public class Renderer {

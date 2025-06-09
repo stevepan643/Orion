@@ -1,7 +1,6 @@
 package com.steve.orion.platform.opengl;
 
 import com.steve.orion.Log.Loggable;
-import com.steve.orion.core.Core;
 import com.steve.orion.renderer.texture.Texture2D;
 
 import java.nio.ByteBuffer;

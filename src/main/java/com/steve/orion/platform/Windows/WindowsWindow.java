@@ -1,8 +1,8 @@
 package com.steve.orion.platform.Windows;
 
-import com.steve.orion.core.Core;
 import com.steve.orion.Log.Loggable;
 import com.steve.orion.Window;
+import com.steve.orion.core.Core;
 import com.steve.orion.event.BaseEvent;
 import com.steve.orion.event.Callback;
 import com.steve.orion.event.KeyEvents.KeyPressedEvent;
