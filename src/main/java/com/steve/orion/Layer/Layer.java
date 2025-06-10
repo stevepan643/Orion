@@ -6,7 +6,7 @@ import com.steve.orion.event.Event;
 public interface Layer {
     void onAttach();
     void onDetach();
-    void onUpdate(Timer timestep);
+    void onUpdate(Timer timer);
     void onEvent(Event event);
     void onImGuiRender();
 

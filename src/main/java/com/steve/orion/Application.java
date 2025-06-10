@@ -12,6 +12,7 @@ import com.steve.orion.layer.Layer;
 import com.steve.orion.layer.LayerStack;
 import com.steve.orion.platform.Windows.WindowsWindow;
 import com.steve.orion.renderer.Renderer;
+import imgui.type.ImBoolean;
 
 import java.io.Closeable;
 

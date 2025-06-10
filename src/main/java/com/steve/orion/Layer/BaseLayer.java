@@ -21,7 +21,7 @@ public abstract class BaseLayer implements Layer {
     @Override
     public void onDetach() {}
     @Override
-    public void onUpdate(Timer timestep) {}
+    public void onUpdate(Timer timer) {}
     @Override
     public void onEvent(Event event) {}
     public void onImGuiRender() {}

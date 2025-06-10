@@ -1,5 +1,6 @@
 package com.steve.orion.ImGui;
 
+import com.steve.orion.Log.Loggable;
 import com.steve.orion.Window;
 import com.steve.orion.layer.BaseLayer;
 import imgui.ImGui;
@@ -14,7 +15,7 @@ import imgui.type.ImBoolean;
 
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 
-public class ImGuiLayer extends BaseLayer {
+public class ImGuiLayer extends BaseLayer implements Loggable {
     private final ImGuiImplGl3 imGuiImplGl3 = new ImGuiImplGl3();
     private final ImGuiImplGlfw imGuiImplGlfw = new ImGuiImplGlfw();
     private final Window window;
@@ -58,7 +59,7 @@ public class ImGuiLayer extends BaseLayer {
 
     @Override
     public void onImGuiRender() {
-        ImGui.showDemoWindow(show);
+        if (show.get()) ImGui.showDemoWindow(show);
     }
 
     public void begin() {
